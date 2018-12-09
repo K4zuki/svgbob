@@ -1,0 +1,28 @@
+version: 2
+jobs:
+  build:
+    docker:
+    - image: rust
+    steps:
+    - checkout
+    - run:
+        name: mkdir
+        command: mkdir build
+    - run:
+        name: ghr
+        command: |
+          cd build
+          wget -c https://github.com/tcnksm/ghr/releases/download/v0.5.4/ghr_v0.5.4_linux_amd64.zip
+          unzip -e ghr_v0.5.4_linux_amd64.zip
+    - run:
+        name: build
+        command: cargo install svgbob_cli --root=build
+    - run:
+        name: Deploy preparation
+        command: |
+          mkdir deploy
+          ls build/
+        #    - run:
+#        name: Deploy
+#        command: |
+#          ghr -replace -t $GITHUB_TOKEN -u $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME build-`date +%b-%d-%Y`-`git rev-parse --short HEAD` deploy/
