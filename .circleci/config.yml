@@ -9,6 +9,7 @@ jobs:
         name: mkdir
         command: |
           mkdir build
+          apt update
           apt search unzip
         #          apt install -y unzip
     - run:
