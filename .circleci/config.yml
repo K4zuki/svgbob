@@ -17,6 +17,7 @@ jobs:
           cd build
           wget -c https://github.com/tcnksm/ghr/releases/download/v0.5.4/ghr_v0.5.4_linux_amd64.zip
           unzip -e ghr_v0.5.4_linux_amd64.zip
+          cp build/ghr /usr/local/bin
     - run:
         name: build
         command: cargo install svgbob_cli --root=build
@@ -29,4 +30,4 @@ jobs:
     - run:
         name: Deploy
         command: |
-          build/ghr -replace -t $GITHUB_TOKEN -u $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME build-`date +%b-%d-%Y`-`git describe --tags` deploy/
+          ghr -replace -t $GITHUB_TOKEN -u $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME build-`date +%b-%d-%Y`-`git describe --tags` deploy
