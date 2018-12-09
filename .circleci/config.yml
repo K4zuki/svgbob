@@ -12,7 +12,7 @@ jobs:
           apt update
           apt install -y unzip
     - run:
-        name: ghr
+        name: Prepare ghr
         command: |
           cd build
           wget -c https://github.com/tcnksm/ghr/releases/download/v0.5.4/ghr_v0.5.4_linux_amd64.zip
