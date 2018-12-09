@@ -9,7 +9,8 @@ jobs:
         name: mkdir
         command: |
           mkdir build
-          apt install -y unzip
+          apt search unzip
+        #          apt install -y unzip
     - run:
         name: ghr
         command: |
