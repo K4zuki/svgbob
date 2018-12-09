@@ -7,7 +7,9 @@ jobs:
     - checkout
     - run:
         name: mkdir
-        command: mkdir build
+        command: |
+          mkdir build
+          apt install -y unzip
     - run:
         name: ghr
         command: |
