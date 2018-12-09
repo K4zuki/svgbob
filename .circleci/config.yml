@@ -24,8 +24,9 @@ jobs:
         name: Deploy preparation
         command: |
           mkdir deploy
-          ls build/
-        #    - run:
-#        name: Deploy
-#        command: |
-#          ghr -replace -t $GITHUB_TOKEN -u $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME build-`date +%b-%d-%Y`-`git rev-parse --short HEAD` deploy/
+          ls -R build/
+          cp build/bin/svgbob deploy/
+    - run:
+        name: Deploy
+        command: |
+          ghr -replace -t $GITHUB_TOKEN -u $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME build-`date +%b-%d-%Y`-`git digest` deploy/
