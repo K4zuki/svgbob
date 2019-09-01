@@ -11,7 +11,6 @@ jobs:
             # https://circleci.com/docs/2.0/env-vars/#setting-an-environment-variable-in-a-shell-command
             echo "export DATE=`date +%Y-%m%b-%d`" >> $BASH_ENV
             echo "export SHORT_HASH=${CIRCLE_SHA1:0:7}" >> $BASH_ENV
-            echo "export BUILD=linux-`git describe --tags`" >> $BASH_ENV
             source $BASH_ENV
             echo "SHORT_HASH=" $SHORT_HASH
             echo "DATE=" $DATE
@@ -41,4 +40,4 @@ jobs:
       - run:
           name: Deploy
           command: |
-            ghr -replace -t $GITHUB_TOKEN -u $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME $BUILD deploy
+            ghr -replace -t $GITHUB_TOKEN -u $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME linux-`git describe --tags` deploy
