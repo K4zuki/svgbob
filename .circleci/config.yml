@@ -12,6 +12,8 @@ jobs:
             echo "export DATE=`date +%Y-%m%b-%d`" >> $BASH_ENV
             echo "export SHORT_HASH=${CIRCLE_SHA1:0:7}" >> $BASH_ENV
             source $BASH_ENV
+            echo "export BUILD=build-$CIRCLE_BUILD_NUM-$CIRCLE_BRANCH-$DATE-$SHORT_HASH" >> $BASH_ENV
+            source $BASH_ENV
             echo "SHORT_HASH=" $SHORT_HASH
             echo "DATE=" $DATE
             echo "BUILD=" $BUILD
@@ -36,8 +38,8 @@ jobs:
           command: |
             mkdir deploy
             ls -R build/
-            cp build/bin/svgbob deploy/
+            cp build/bin/svgbob deploy/svgbob-linux-`git describe --tags`
       - run:
           name: Deploy
           command: |
-            ghr -replace -t $GITHUB_TOKEN -u $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME linux-`git describe --tags` deploy
+            ghr -replace -t $GITHUB_TOKEN -u $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME $BUILD deploy
