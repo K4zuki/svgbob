@@ -42,4 +42,4 @@ jobs:
       - run:
           name: Deploy
           command: |
-            ghr -replace -t $GITHUB_TOKEN -u $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME $BUILD deploy
+            ghr -replace -token $GITHUB_TOKEN -username $CIRCLE_PROJECT_USERNAME -repository $CIRCLE_PROJECT_REPONAME $BUILD deploy
