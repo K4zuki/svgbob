@@ -2,32 +2,43 @@ version: 2
 jobs:
   build:
     docker:
-    - image: rust
+      - image: rust
     steps:
-    - checkout
-    - run:
-        name: mkdir
-        command: |
-          mkdir build
-          apt update
-          apt install -y unzip
-    - run:
-        name: Prepare ghr
-        command: |
-          cd build
-          wget -c https://github.com/tcnksm/ghr/releases/download/v0.5.4/ghr_v0.5.4_linux_amd64.zip
-          unzip -e ghr_v0.5.4_linux_amd64.zip
-          cp ./ghr /usr/local/bin
-    - run:
-        name: build
-        command: cargo install svgbob_cli --root=build
-    - run:
-        name: Deploy preparation
-        command: |
-          mkdir deploy
-          ls -R build/
-          cp build/bin/svgbob deploy/
-    - run:
-        name: Deploy
-        command: |
-          ghr -replace -t $GITHUB_TOKEN -u $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME linux-`git describe --tags` deploy
+      - checkout
+      - run:
+          name: env variables
+          command: |
+            # https://circleci.com/docs/2.0/env-vars/#setting-an-environment-variable-in-a-shell-command
+            echo "export DATE=`date +%Y-%m%b-%d`" >> $BASH_ENV
+            echo "export SHORT_HASH=${CIRCLE_SHA1:0:7}" >> $BASH_ENV
+            echo "export BUILD=linux-`git describe --tags`" >> $BASH_ENV
+            source $BASH_ENV
+            echo "SHORT_HASH=" $SHORT_HASH
+            echo "DATE=" $DATE
+            echo "BUILD=" $BUILD
+      - run:
+          name: mkdir
+          command: |
+            mkdir build
+            apt update
+            apt install -y unzip
+      - run:
+          name: Prepare ghr
+          command: |
+            cd build
+            wget -c https://github.com/tcnksm/ghr/releases/download/v0.5.4/ghr_v0.5.4_linux_amd64.zip
+            unzip -e ghr_v0.5.4_linux_amd64.zip
+            cp ./ghr /usr/local/bin
+      - run:
+          name: build
+          command: cargo install svgbob_cli --root=build
+      - run:
+          name: Deploy preparation
+          command: |
+            mkdir deploy
+            ls -R build/
+            cp build/bin/svgbob deploy/
+      - run:
+          name: Deploy
+          command: |
+            ghr -replace -t $GITHUB_TOKEN -u $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME $BUILD deploy
